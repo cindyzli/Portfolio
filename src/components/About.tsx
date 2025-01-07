@@ -4,14 +4,14 @@ import { Container } from '@/components/Container'
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import pic1 from '@/images/logos/pic1.jpg'
-import pic2 from '@/images/logos/pic3.jpg'
+// import pic1 from '@/images/logos/pic1.jpg'
+// import pic2 from '@/images/logos/pic2.jpg'
 import pic3 from '@/images/logos/pic3.jpg'
-import pic4 from '@/images/logos/pic4.jpg'
+// import pic4 from '@/images/logos/pic4.jpg'
 
 export function About() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [pic1, pic2, pic3, pic4];
+  const images = [pic3];
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -47,7 +47,7 @@ export function About() {
           </div>
 
           <div className="mt-8 sm:mt-0 w-[300px] h-[400px]">
-            <Image src={images[currentIndex]} alt="logo" width={300} height={400} className="rounded-md" />
+            <Image src={pic3} alt="logo" width={300} height={400} className="rounded-md" />
           </div>
         </div>
       </Container>
