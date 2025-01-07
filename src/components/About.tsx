@@ -5,7 +5,7 @@ import { Container } from '@/components/Container'
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import pic1 from '@/images/logos/pic1.jpg'
-import pic2 from '@/images/logos/pic2.jpg'
+import pic2 from '@/images/logos/pic3.jpg'
 import pic3 from '@/images/logos/pic3.jpg'
 import pic4 from '@/images/logos/pic4.jpg'
 
