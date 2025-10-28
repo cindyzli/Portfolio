@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const timelineData = [
-    //{ id: 1, date: 'May 25 - Aug 25', title: 'Adobe', desc: 'Software Engineering Intern', color: 'bg-pink-500' },
+    { id: 1, date: 'May 25 - Aug 25', title: 'Adobe', desc: 'Software Engineering Intern', color: 'bg-pink-500' },
     { id: 2, date: 'Jun 24 - Aug 24', title: 'M&T Bank', desc: 'Software Engineering Intern', color: 'bg-pink-400' },
     { id: 3, date: 'Aug 23 - Aug 24', title: 'YC - Page One Lab', desc: 'Full-Stack Developer', color: 'bg-pink-300' },
     { id: 4, date: 'Jun 23 - Aug 23', title: 'Autodocs LLC', desc: 'QA Intern', color: 'bg-pink-200' },

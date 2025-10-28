@@ -30,6 +30,13 @@ interface CustomAnimationProps {
 
 const features = [
   {
+    name: 'Pi-Pal',
+    description:
+      'A raspberry pi powered med device that gives patients more autonomy - won first place at Hoya Hacks',
+    icon: DeviceUserIcon,
+    screen: InviteScreen,
+  },
+  {
     name: 'osulation!',
     description:
       'A program that plays osu! with hand signals using computer vision - won best use of roboflow at MHacks 17',
