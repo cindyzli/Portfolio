@@ -30,19 +30,19 @@ interface CustomAnimationProps {
 
 const features = [
   {
-    name: 'Pi-Pal',
+    name: 'wub wub',
     description:
-      'A raspberry pi powered med device that gives patients more autonomy - won first place at Hoya Hacks',
+      'A CV-powered DJ program in your web - won first place at Big Red Hacks 2025',
     icon: DeviceUserIcon,
     screen: InviteScreen,
   },
-  {
-    name: 'osulation!',
-    description:
-      'A program that plays osu! with hand signals using computer vision - won best use of roboflow at MHacks 17',
-    icon: DeviceUserIcon,
-    screen: InviteScreen,
-  },
+  // {
+  //   name: 'osulation!',
+  //   description:
+  //     'A program that plays osu! with hand signals using computer vision - won best use of roboflow at MHacks 17',
+  //   icon: DeviceUserIcon,
+  //   screen: InviteScreen,
+  // },
   {
     name: 'Perfect Match',
     description:
@@ -194,13 +194,13 @@ function InviteScreen(props: ScreenProps) {
   return (
     <AppScreen className="w-full">
       <MotionAppScreenHeader {...(props.animated ? headerAnimation : {})}>
-        <AppScreen.Title>osulation!</AppScreen.Title>
+        <AppScreen.Title>wub wub</AppScreen.Title>
         <AppScreen.Subtitle>
           Play games in a <span className="text-white">new</span> way.
         </AppScreen.Subtitle>
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-4 animate-bounce">
           <Button
-            href="https://devpost.com/software/osulation"
+            href="https://devpost.com/software/wubwub?ref_content=my-projects-tab&ref_feature=my_projects"
             variant="outline"
           >
             <span className="text-white mt-.5">Go to Devpost  </span>
