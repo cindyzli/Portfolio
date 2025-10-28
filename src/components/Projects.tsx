@@ -29,20 +29,20 @@ interface CustomAnimationProps {
 }
 
 const features = [
-  {
-    name: 'wub wub',
-    description:
-      'A CV-powered DJ program in your web - won first place at Big Red Hacks 2025',
-    icon: DeviceUserIcon,
-    screen: InviteScreen,
-  },
   // {
-  //   name: 'osulation!',
+  //   name: 'Pi-Pal',
   //   description:
-  //     'A program that plays osu! with hand signals using computer vision - won best use of roboflow at MHacks 17',
+  //     'A raspberry pi powered med device that gives patients more autonomy - won first place at Hoya Hacks',
   //   icon: DeviceUserIcon,
   //   screen: InviteScreen,
   // },
+  {
+    name: 'osulation!',
+    description:
+      'A program that plays osu! with hand signals using computer vision - won best use of roboflow at MHacks 17',
+    icon: DeviceUserIcon,
+    screen: InviteScreen,
+  },
   {
     name: 'Perfect Match',
     description:
@@ -194,13 +194,13 @@ function InviteScreen(props: ScreenProps) {
   return (
     <AppScreen className="w-full">
       <MotionAppScreenHeader {...(props.animated ? headerAnimation : {})}>
-        <AppScreen.Title>wub wub</AppScreen.Title>
+        <AppScreen.Title>osulation!</AppScreen.Title>
         <AppScreen.Subtitle>
           Play games in a <span className="text-white">new</span> way.
         </AppScreen.Subtitle>
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-4 animate-bounce">
           <Button
-            href="https://devpost.com/software/wubwub?ref_content=my-projects-tab&ref_feature=my_projects"
+            href="https://devpost.com/software/osulation"
             variant="outline"
           >
             <span className="text-white mt-.5">Go to Devpost  </span>
@@ -217,9 +217,8 @@ function InviteScreen(props: ScreenProps) {
 
         </div>
 
-        {/* <Image src={osuimg} alt="osu" />
-        <Image src={roboflowimg} alt="roboflow" /> */}
-        <iframe src="https://devpost.com/software/wubwub?ref_content=my-projects-tab&ref_feature=my_projects" width="320" height="500" scrolling="no"></iframe>
+        <Image src={osuimg} alt="osu" />
+        <Image src={roboflowimg} alt="roboflow" />
 
       </MotionAppScreenBody>
     </AppScreen>
