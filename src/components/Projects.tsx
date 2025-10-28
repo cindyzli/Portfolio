@@ -217,8 +217,9 @@ function InviteScreen(props: ScreenProps) {
 
         </div>
 
-        <Image src={osuimg} alt="osu" />
-        <Image src={roboflowimg} alt="roboflow" />
+        {/* <Image src={osuimg} alt="osu" />
+        <Image src={roboflowimg} alt="roboflow" /> */}
+        <iframe src="https://devpost.com/software/wubwub?ref_content=my-projects-tab&ref_feature=my_projects" width="320" height="500" scrolling="no"></iframe>
 
       </MotionAppScreenBody>
     </AppScreen>
