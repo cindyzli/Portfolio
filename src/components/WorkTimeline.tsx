@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import Image from 'next/image'
+import { assetPath } from '@/data/projects'
 
 type TimelineItem = {
   id: number
@@ -174,7 +175,7 @@ const Timeline = () => {
                   <div className="flex items-start gap-4">
                     <LogoSquare
                       text={milestone.logoText}
-                      src={milestone.logoSrc}
+                      src={milestone.logoSrc ? assetPath(milestone.logoSrc) : undefined}
                       alt={`${milestone.title} logo`}
                       accent={milestone.accent}
                     />

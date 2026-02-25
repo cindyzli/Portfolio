@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import Image from 'next/image'
+import { assetPath } from '@/data/projects'
 
 type TimelineItem = {
   id: number
@@ -23,7 +24,7 @@ const timelineData: TimelineItem[] = [
     school: 'Cornell University',
     detail: 'Computer Science • School of Engineering',
     gpa: '3.9 / 4.0',
-    date: 'Expected 2026',
+    date: 'Expected May 2027',
     logoText: 'CU',
     logoSrc: '/logos/Cornell_University_Logo.png',
     accent: ['#fb7185', '#a855f7'],
@@ -135,7 +136,7 @@ const Timeline = () => {
                   <div className="flex items-start gap-4">
                     <LogoSquare
                       text={milestone.logoText}
-                      src={milestone.logoSrc}
+                      src={milestone.logoSrc ? assetPath(milestone.logoSrc) : undefined}
                       alt={`${milestone.school} logo`}
                       accent={milestone.accent}
                     />

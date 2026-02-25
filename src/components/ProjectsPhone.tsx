@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { PhoneFrame } from '@/components/PhoneFrame'
 import { Button } from '@/components/Button'
-import { phoneHome, projectsById, type Project, type PhoneHomeItem } from '@/data/projects'
+import { phoneHome, projectsById, assetPath, type Project, type PhoneHomeItem } from '@/data/projects'
 
 type PhoneView =
   | { kind: 'home' }
@@ -39,7 +39,7 @@ function AppTile({
       >
         {project.iconImage ? (
           <Image
-            src={project.iconImage}
+            src={assetPath(project.iconImage)}
             alt={project.name}
             width={56}
             height={56}
@@ -250,7 +250,7 @@ function ProjectDetail({
           >
             {project.iconImage ? (
               <Image
-                src={project.iconImage}
+                src={assetPath(project.iconImage)}
                 alt={project.name}
                 width={48}
                 height={48}

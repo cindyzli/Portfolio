@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { CircleBackground } from '@/components/CircleBackground'
 import { Container } from '@/components/Container'
 import { ProjectsPhone } from '@/components/ProjectsPhone'
-import { projectsById, type Project } from '@/data/projects'
+import { projectsById, assetPath, type Project } from '@/data/projects'
 
 function PreviewScreen({ project }: { project: Project | null }) {
   if (!project) {
@@ -59,7 +59,7 @@ function PreviewScreen({ project }: { project: Project | null }) {
         {hasImage ? (
           <div className="relative flex h-full items-center justify-center bg-black/30 p-6">
             <Image
-              src={project.previewImage!}
+              src={assetPath(project.previewImage!)}
               alt={`${project.name} preview`}
               width={1200}
               height={675}
