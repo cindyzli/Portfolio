@@ -1,66 +1,222 @@
-import React, { useState } from 'react';
+'use client'
 
-const timelineData = [
-    { id: 1, date: 'May 25 - Aug 25', title: 'Adobe', desc: 'Software Engineering Intern', color: 'bg-pink-500' },
-    { id: 2, date: 'Jun 24 - Aug 24', title: 'M&T Bank', desc: 'Software Engineering Intern', color: 'bg-pink-400' },
-    { id: 3, date: 'Aug 23 - Aug 24', title: 'YC - Page One Lab', desc: 'Full-Stack Developer', color: 'bg-pink-300' },
-    // { id: 4, date: 'Jun 23 - Aug 23', title: 'Autodocs LLC', desc: 'QA Intern', color: 'bg-pink-200' },
-];
+import React, { useState } from 'react'
+import clsx from 'clsx'
+import Image from 'next/image'
+
+type TimelineItem = {
+  id: number
+  date: string
+  title: string
+  role: string
+  team?: string
+  logoText: string
+  logoSrc?: string
+  accent: [string, string]
+  highlights: string[]
+}
+
+const timelineData: TimelineItem[] = [
+  {
+    id: 1,
+    date: 'Aug 2026 – Dec 2026',
+    title: 'Google',
+    role: 'Software Engineering Intern',
+    logoText: 'G',
+    logoSrc: '/logos/Google__G__logo.svg.png',
+    accent: ['#34a853', '#4285f4'],
+    team: 'Gmail Backend',
+    highlights: [],
+  },
+  {
+    id: 2,
+    date: 'Jun 2026 – Aug 2026',
+    title: 'IMC Trading',
+    role: 'Software Engineering Intern',
+    logoText: 'IMC',
+    logoSrc: '/logos/imclogo.jpg',
+    accent: ['#60a5fa', '#3b82f6'],
+    highlights: [],
+  },
+  {
+    id: 3,
+    date: 'Feb 2025 – May 2026',
+    title: 'Rippling',
+    role: 'Software Engineering Intern',
+    logoText: 'R',
+    logoSrc: '/logos/ripplinglogo.png',
+    team: 'AI Platform Team',
+    accent: ['#fbbf24', '#f59e0b'],
+    highlights: [
+      'Designed and implemented diagnostic evaluation metrics for a multi-stage ML search pipeline serving Rippling\'s Data Answers product',
+      'Deployed and evaluated an LLM auto-tuning agent for semantic field clustering on Databricks, identifying gaps that reduced retrieval call'   ],
+  },
+  {
+    id: 4,
+    date: 'May 2025 – Aug 2025',
+    title: 'Adobe',
+    role: 'Software Engineering Intern',
+    logoText: 'A',
+    logoSrc: '/logos/adobe.jpg',
+    accent: ['#fb7185', '#a855f7'],
+    team: 'Rich Media Effects Team',
+    highlights: [
+      'Developed composable node-graph architecture for Adobe Express, focusing on scalable rendering infrastructure',
+      'Engineered RME-to-ECS conversion pipeline with worker-thread communication architecture, enabling real-time graph processing for visual effects authoring',
+    ],
+  },
+  {
+    id: 5,
+    date: 'Jun 2024 – Aug 2024',
+    title: 'M&T Bank',
+    role: 'Software Engineering Intern',
+    logoText: 'M&T',
+    logoSrc: '/logos/mt_bank_logo.jpeg',
+    accent: ['#f472b6', '#fb7185'],
+    highlights: [
+      'Developed ETL data pipeline in Python pulling raw Microsoft SQL Server data for loan risk visualization and analytics.',
+      'Replaced legacy SAS system ($2M/year valuation) for all loan data, enhancing scalability and reliability',
+    ],
+  },
+  {
+    id: 6,
+    date: 'Aug 2023 – Aug 2024',
+    title: 'YC – Page One Lab',
+    role: 'Full‑Stack Developer',
+    logoText: 'YC',
+    logoSrc: '/logos/Y_Combinator_logo.svg.png',
+    accent: ['#a78bfa', '#22d3ee'],
+    highlights: [
+      'Designed and implemented end-to-end architecture for a multi-tenant form-building platform, from frontend React interface to backend data pipelines (Node.js, MongoDB).',
+      'Collaborated with a product designer to create user-centric workflows, while designing the backend system architecture and database schema for scalable data storage and retrieval.',
+    ],
+  },
+]
+
+function LogoSquare({
+  text,
+  src,
+  alt,
+  accent,
+}: {
+  text: string
+  src?: string
+  alt: string
+  accent: [string, string]
+}) {
+  return (
+    <div
+      className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/15"
+      aria-label={alt}
+    >
+      {src ? (
+        <Image
+          src={src}
+          alt={alt}
+          width={56}
+          height={56}
+          className="h-12 w-12 object-contain"
+        />
+      ) : (
+        <span
+          className="text-sm font-semibold text-white"
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${accent[0]}, ${accent[1]})`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
+          {text}
+        </span>
+      )}
+    </div>
+  )
+}
 
 const Timeline = () => {
-    const [selectedMilestone, setSelectedMilestone] = useState(null);
+  const [openId, setOpenId] = useState<number | null>(null)
 
-    const closeModal = () => {
-        setSelectedMilestone(null);
-    };
+  return (
+    <div className="container mx-auto px-4 py-10">
+      <div className="relative overflow-hidden p-10">
+        <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-pink-400/35 via-fuchsia-400/20 to-transparent shadow-[0_0_22px_rgba(236,72,153,0.25)]" />
 
-    return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="relative wrap overflow-hidden p-10 h-full">
-                <div className="border-2-2 absolute border-opacity-20 border-gray-700 h-full border left-1/2"></div>
-                {timelineData.map((milestone, index) => (
-                    <div
-                        key={milestone.id}
-                        className={`mb-8 flex justify-between items-center w-full ${index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'
-                            }`}
-                    >
-                        <div className="order-1 w-5/12"></div>
-                        <div className="z-20 flex items-center order-1 bg-pink-800 shadow-xl w-8 h-8 rounded-full min-w-fit p-2">
-                            <h1 className="mx-auto font-semibold text-lg text-white"></h1>
-                        </div>
-                        <button
+        {timelineData.map((milestone, index) => {
+          let isOpen = openId === milestone.id
+          let isRight = index % 2 === 1
 
-                            className={`order-1 w-5/12 px-6 py-4 rounded-lg shadow-xl ${milestone.color} text-white cursor-pointer transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${milestone.color.split('-')[1]}-400`}
-                        >
-                            <h3 className="mb-3 font-bold text-xl">{milestone.title}</h3>
-                            <h4 className="mb-1 font-style: italic font-normal text-m">{milestone.desc}</h4>
-                            <h5 className="font-light text-sm">{milestone.date}</h5>
-                        </button>
+          return (
+            <div
+              key={milestone.id}
+              className={clsx(
+                'mb-10 flex w-full items-center',
+                isRight ? 'justify-end' : 'justify-start',
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenId((id) => (id === milestone.id ? null : milestone.id))}
+                className={clsx(
+                  'relative w-[52%] overflow-hidden rounded-3xl bg-gray-900/60 px-6 py-5 text-left text-white shadow-xl ring-1 ring-white/10 transition duration-300 hover:scale-[1.01] hover:ring-pink-300/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-300',
+                )}
+              >
+                <div
+                  className={clsx(
+                    'absolute inset-y-0 w-1.5',
+                    isRight ? 'left-0' : 'right-0',
+                  )}
+                  style={{
+                    backgroundImage: `linear-gradient(180deg, ${milestone.accent[0]}, ${milestone.accent[1]})`,
+                  }}
+                  aria-hidden="true"
+                />
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-4">
+                    <LogoSquare
+                      text={milestone.logoText}
+                      src={milestone.logoSrc}
+                      alt={`${milestone.title} logo`}
+                      accent={milestone.accent}
+                    />
+                    <div>
+                      <h3 className="text-xl font-semibold tracking-tight">
+                        {milestone.title}
+                      </h3>
+                      <div className="mt-1 text-sm font-medium text-white/70">
+                        {milestone.role}
+                      </div>
                     </div>
-                ))}
-            </div>
-
-            {selectedMilestone && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onClick={closeModal}>
-                    <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
-                        <div className="mt-3 text-center">
-                            <div className="mt-2 px-7 py-3">
-                            </div>
-                            <div className="items-center px-4 py-3">
-                                <button
-                                    id="closeModal"
-                                    onClick={closeModal}
-                                    className="px-4 py-2 bg-gray-800 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
+                  <div className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/75 ring-1 ring-white/10">
+                    {milestone.date}
+                  </div>
                 </div>
-            )}
-        </div>
-    );
-};
 
-export default Timeline;
+                {isOpen && milestone.highlights.length > 0 && (
+                  <div className="mt-4 rounded-2xl bg-black/20 p-4 ring-1 ring-white/10">
+                    <div className="text-xs font-semibold text-white/85">
+                      {milestone.team ?? 'Highlights'}
+                    </div>
+                    <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-white/75">
+                      {milestone.highlights.map((h) => (
+                        <li key={h}>{h}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {milestone.highlights.length > 0 && (
+                  <div className="mt-3 text-xs font-semibold text-white/70">
+                    {isOpen ? 'Click to collapse' : 'Click to expand'}
+                  </div>
+                )}
+              </button>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default Timeline

@@ -1,64 +1,214 @@
-import React, { useState } from 'react';
+'use client'
 
-const timelineData = [
-    { id: 1, date: '', title: 'Cornell University', desc: 'Computer Science Degree in School of Engineering', dt: 'Expected 2026', color: 'bg-pink-400' },
-    { id: 2, date: '', title: 'Oakton High School', desc: '', dt: 'Graduated 2023', color: 'bg-pink-300' },
-];
+import React, { useState } from 'react'
+import clsx from 'clsx'
+import Image from 'next/image'
+
+type TimelineItem = {
+  id: number
+  school: string
+  detail: string
+  gpa?: string
+  date: string
+  logoText: string
+  logoSrc?: string
+  accent: [string, string]
+  ta?: string[]
+  coursework?: string[]
+}
+
+const timelineData: TimelineItem[] = [
+  {
+    id: 1,
+    school: 'Cornell University',
+    detail: 'Computer Science • School of Engineering',
+    gpa: '3.9 / 4.0',
+    date: 'Expected 2026',
+    logoText: 'CU',
+    logoSrc: '/logos/Cornell_University_Logo.png',
+    accent: ['#fb7185', '#a855f7'],
+    ta: ['Databases', 'Discrete Mathematics', 'Financial Engineering'],
+    coursework: [
+      'Algorithms',
+      'Data Structures & OOP',
+      'Computer Vision',
+      'Machine Learning',
+      'Computer Systems',
+      'Networks',
+      'Functional Programming (OCaml)',
+      'Linear Algebra',
+      'Databases',
+      'Discrete Structures',
+      'Systems Programming',
+    ],
+  },
+  {
+    id: 2,
+    school: 'Oakton High School',
+    detail: 'Northern Virginia',
+    gpa: '4.7 / 4.0',
+    date: 'Graduated 2023',
+    logoText: 'OH',
+    logoSrc: '/logos/ohs.jpg',
+    accent: ['#f472b6', '#fb7185'],
+  },
+]
+
+function LogoSquare({
+  text,
+  src,
+  alt,
+  accent,
+}: {
+  text: string
+  src?: string
+  alt: string
+  accent: [string, string]
+}) {
+  return (
+    <div
+      className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/15"
+      aria-label={alt}
+    >
+      {src ? (
+        <Image
+          src={src}
+          alt={alt}
+          width={56}
+          height={56}
+          className="h-12 w-12 object-contain"
+        />
+      ) : (
+        <span
+          className="text-sm font-semibold text-white"
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${accent[0]}, ${accent[1]})`,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
+          {text}
+        </span>
+      )}
+    </div>
+  )
+}
 
 const Timeline = () => {
-    const [selectedMilestone, setSelectedMilestone] = useState(null);
+  const [openId, setOpenId] = useState<number | null>(null)
 
-    const closeModal = () => {
-        setSelectedMilestone(null);
-    };
+  return (
+    <div className="container mx-auto px-4 py-10">
+      <div className="relative overflow-hidden p-10">
+        <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-pink-400/35 via-fuchsia-400/20 to-transparent shadow-[0_0_22px_rgba(236,72,153,0.25)]" />
 
-    return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="relative wrap overflow-hidden p-10 h-full">
-                <div className="border-2-2 absolute border-opacity-20 border-gray-700 h-full border left-1/2"></div>
-                {timelineData.map((milestone, index) => (
-                    <div
-                        key={milestone.id}
-                        className={`mb-8 flex justify-between items-center w-full ${index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'
-                            }`}
-                    >
-                        <div className="order-1 w-5/12"></div>
-                        <div className="z-20 flex items-center order-1 bg-pink-800 shadow-xl w-8 h-8 rounded-full min-w-fit p-2">
-                            <h1 className="mx-auto font-semibold text-lg text-white">{milestone.date}</h1>
+        {timelineData.map((milestone, index) => {
+          let isOpen = openId === milestone.id
+          let isRight = index % 2 === 1
+
+          return (
+            <div
+              key={milestone.id}
+              className={clsx(
+                'mb-10 flex w-full items-center',
+                isRight ? 'justify-end' : 'justify-start',
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenId((id) => (id === milestone.id ? null : milestone.id))}
+                className={clsx(
+                  'relative w-[52%] overflow-hidden rounded-3xl bg-gray-900/60 px-6 py-5 text-left text-white shadow-xl ring-1 ring-white/10 transition duration-300 hover:scale-[1.01] hover:ring-pink-300/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-300',
+                )}
+              >
+                <div
+                  className={clsx(
+                    'absolute inset-y-0 w-1.5',
+                    isRight ? 'left-0' : 'right-0',
+                  )}
+                  style={{
+                    backgroundImage: `linear-gradient(180deg, ${milestone.accent[0]}, ${milestone.accent[1]})`,
+                  }}
+                  aria-hidden="true"
+                />
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-4">
+                    <LogoSquare
+                      text={milestone.logoText}
+                      src={milestone.logoSrc}
+                      alt={`${milestone.school} logo`}
+                      accent={milestone.accent}
+                    />
+                    <div>
+                      <h3 className="text-xl font-semibold tracking-tight">
+                        {milestone.school}
+                      </h3>
+                      <div className="mt-1 text-sm font-medium text-white/70">
+                        {milestone.detail}
+                      </div>
+                      {milestone.gpa && (
+                        <div className="mt-0.5 text-xs font-medium text-white/50">
+                          GPA: {milestone.gpa}
                         </div>
-                        <button
-
-                            className={`order-1 w-5/12 px-6 py-4 rounded-lg shadow-xl ${milestone.color} text-white cursor-pointer transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${milestone.color.split('-')[1]}-400`}
-                        >
-                            <h3 className="mb-3 font-bold text-xl">{milestone.title}</h3>
-                            <h4 className="mb-1 font-style: italic font-normal text-m">{milestone.desc}</h4>
-                            <h5 className="font-light text-sm">{milestone.dt}</h5>
-                        </button>
+                      )}
                     </div>
-                ))}
-            </div>
-
-            {selectedMilestone && (
-                <div className="fixed inset-0 bg-pink-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" onClick={closeModal}>
-                    <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
-                        <div className="mt-3 text-center">
-                            <div className="mt-2 px-7 py-3">
-                            </div>
-                            <div className="items-center px-4 py-3">
-                                <button
-                                    id="closeModal"
-                                    onClick={closeModal}
-                                    className="px-4 py-2 bg-pink-800 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
+                  <div className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/75 ring-1 ring-white/10">
+                    {milestone.date}
+                  </div>
                 </div>
-            )}
-        </div>
-    );
-};
 
-export default Timeline;
+                {isOpen && (milestone.ta || milestone.coursework) && (
+                  <div className="mt-4 space-y-3 rounded-2xl bg-black/20 p-4 ring-1 ring-white/10">
+                    {milestone.ta && (
+                      <div>
+                        <div className="text-xs font-semibold text-white/85">
+                          Teaching Assistant
+                        </div>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {milestone.ta.map((course) => (
+                            <span
+                              key={course}
+                              className="rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/70 ring-1 ring-white/10"
+                            >
+                              {course}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {milestone.coursework && (
+                      <div>
+                        <div className="text-xs font-semibold text-white/85">
+                          Relevant Coursework
+                        </div>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {milestone.coursework.map((course) => (
+                            <span
+                              key={course}
+                              className="rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-medium text-white/70 ring-1 ring-white/10"
+                            >
+                              {course}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {(milestone.ta || milestone.coursework) && (
+                  <div className="mt-3 text-xs font-semibold text-white/70">
+                    {isOpen ? 'Click to collapse' : 'Click to expand'}
+                  </div>
+                )}
+              </button>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default Timeline

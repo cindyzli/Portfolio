@@ -50,7 +50,7 @@ function MobileNavLink(
   return (
     <PopoverButton
       as={Link}
-      className="block text-base leading-7 tracking-tight text-gray-700"
+      className="block text-base leading-7 tracking-tight text-white/70"
       {...props}
     />
   )
@@ -58,7 +58,7 @@ function MobileNavLink(
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-white shadow">
+    <header className="sticky top-0 z-50 bg-gray-950/80 shadow-lg shadow-black/20 backdrop-blur-md ring-1 ring-white/10">
       <nav>
         <Container className="relative z-50 flex justify-between py-8 ">
           <div className="relative z-10 flex items-center gap-16">
@@ -74,7 +74,7 @@ export function Header() {
               {({ open }) => (
                 <>
                   <PopoverButton
-                    className="relative z-10 -m-2 inline-flex items-center rounded-lg stroke-gray-900 p-2 hover:bg-gray-200/50 hover:stroke-gray-600 active:stroke-gray-900 ui-not-focus-visible:outline-none"
+                    className="relative z-10 -m-2 inline-flex items-center rounded-lg stroke-white p-2 hover:bg-white/10 hover:stroke-white/70 active:stroke-white ui-not-focus-visible:outline-none"
                     aria-label="Toggle site navigation"
                   >
                     {({ open }) =>
@@ -94,7 +94,7 @@ export function Header() {
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
-                          className="fixed inset-0 z-0 bg-gray-300/60 backdrop-blur"
+                          className="fixed inset-0 z-0 bg-black/60 backdrop-blur"
                         />
                         <PopoverPanel
                           static
@@ -106,7 +106,7 @@ export function Header() {
                             y: -32,
                             transition: { duration: 0.2 },
                           }}
-                          className="absolute inset-x-0 top-0 z-0 origin-top rounded-b-2xl bg-gray-50 px-6 pb-6 pt-32 shadow-2xl shadow-gray-900/20"
+                          className="absolute inset-x-0 top-0 z-0 origin-top rounded-b-2xl bg-gray-950 px-6 pb-6 pt-32 shadow-2xl shadow-black/40 ring-1 ring-white/10"
                         >
                           <div className="space-y-4">
                             <MobileNavLink href="/#about">

@@ -1,470 +1,124 @@
 'use client'
-import { Button } from '@/components/Button'
-import { Fragment, useEffect, useId, useRef, useState } from 'react'
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
-import clsx from 'clsx'
-import {
-  type MotionProps,
-  type Variant,
-  type Variants,
-  AnimatePresence,
-  motion,
-} from 'framer-motion'
-import { useDebouncedCallback } from 'use-debounce'
-import { AnimatedImage } from '@/components/WalkingCat'
-import { AppScreen } from '@/components/AppScreen'
+
+import { useState } from 'react'
+import Image from 'next/image'
+
 import { CircleBackground } from '@/components/CircleBackground'
 import { Container } from '@/components/Container'
-import { PhoneFrame } from '@/components/PhoneFrame'
-import Image from 'next/image'
-import osuimg from '@/images/logos/osu.gif'
-import roboflowimg from '@/images/logos/roboflowimg.png'
+import { ProjectsPhone } from '@/components/ProjectsPhone'
+import { projectsById, type Project } from '@/data/projects'
 
-const MotionAppScreenHeader = motion(AppScreen.Header)
-const MotionAppScreenBody = motion(AppScreen.Body)
-
-interface CustomAnimationProps {
-  isForwards: boolean
-  changeCount: number
-}
-
-const features = [
-  // {
-  //   name: 'Pi-Pal',
-  //   description:
-  //     'A raspberry pi powered med device that gives patients more autonomy - won first place at Hoya Hacks',
-  //   icon: DeviceUserIcon,
-  //   screen: InviteScreen,
-  // },
-  {
-    name: 'osulation!',
-    description:
-      'A program that plays osu! with hand signals using computer vision - won best use of roboflow at MHacks 17',
-    icon: DeviceUserIcon,
-    screen: InviteScreen,
-  },
-  {
-    name: 'Perfect Match',
-    description:
-      'Web application & algorithm that matches 5k+ Cornell undergraduate users yearly on Valentine\'s day',
-    icon: DeviceNotificationIcon,
-    screen: StocksScreen,
-  },
-  {
-    name: 'Data Quality Framework Analysis Project',
-    description:
-      'Data pipeline to collect, clean, and analyze large datasets & support signal research to construct robust portfolios - a project under Millennium Management',
-    icon: DeviceTouchIcon,
-    screen: InvestScreen,
-  },
-]
-
-function DeviceUserIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" {...props}>
-      <circle cx={16} cy={16} r={16} fill="#A3A3A3" fillOpacity={0.2} />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M16 23a3 3 0 100-6 3 3 0 000 6zm-1 2a4 4 0 00-4 4v1a2 2 0 002 2h6a2 2 0 002-2v-1a4 4 0 00-4-4h-2z"
-        fill="#737373"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M5 4a4 4 0 014-4h14a4 4 0 014 4v24a4.002 4.002 0 01-3.01 3.877c-.535.136-.99-.325-.99-.877s.474-.98.959-1.244A2 2 0 0025 28V4a2 2 0 00-2-2h-1.382a1 1 0 00-.894.553l-.448.894a1 1 0 01-.894.553h-6.764a1 1 0 01-.894-.553l-.448-.894A1 1 0 0010.382 2H9a2 2 0 00-2 2v24a2 2 0 001.041 1.756C8.525 30.02 9 30.448 9 31s-.455 1.013-.99.877A4.002 4.002 0 015 28V4z"
-        fill="#A3A3A3"
-      />
-    </svg>
-  )
-}
-
-function DeviceNotificationIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" {...props}>
-      <circle cx={16} cy={16} r={16} fill="#A3A3A3" fillOpacity={0.2} />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M9 0a4 4 0 00-4 4v24a4 4 0 004 4h14a4 4 0 004-4V4a4 4 0 00-4-4H9zm0 2a2 2 0 00-2 2v24a2 2 0 002 2h14a2 2 0 002-2V4a2 2 0 00-2-2h-1.382a1 1 0 00-.894.553l-.448.894a1 1 0 01-.894.553h-6.764a1 1 0 01-.894-.553l-.448-.894A1 1 0 0010.382 2H9z"
-        fill="#A3A3A3"
-      />
-      <path
-        d="M9 8a2 2 0 012-2h10a2 2 0 012 2v2a2 2 0 01-2 2H11a2 2 0 01-2-2V8z"
-        fill="#737373"
-      />
-    </svg>
-  )
-}
-
-function DeviceTouchIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
-  let id = useId()
-
-  return (
-    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" {...props}>
-      <defs>
-        <linearGradient
-          id={`${id}-gradient`}
-          x1={14}
-          y1={14.5}
-          x2={7}
-          y2={17}
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#737373" />
-          <stop offset={1} stopColor="#D4D4D4" stopOpacity={0} />
-        </linearGradient>
-      </defs>
-      <circle cx={16} cy={16} r={16} fill="#A3A3A3" fillOpacity={0.2} />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M5 4a4 4 0 014-4h14a4 4 0 014 4v13h-2V4a2 2 0 00-2-2h-1.382a1 1 0 00-.894.553l-.448.894a1 1 0 01-.894.553h-6.764a1 1 0 01-.894-.553l-.448-.894A1 1 0 0010.382 2H9a2 2 0 00-2 2v24a2 2 0 002 2h4v2H9a4 4 0 01-4-4V4z"
-        fill="#A3A3A3"
-      />
-      <path
-        d="M7 22c0-4.694 3.5-8 8-8"
-        stroke={`url(#${id}-gradient)`}
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M21 20l.217-5.513a1.431 1.431 0 00-2.85-.226L17.5 21.5l-1.51-1.51a2.107 2.107 0 00-2.98 0 .024.024 0 00-.005.024l3.083 9.25A4 4 0 0019.883 32H25a4 4 0 004-4v-5a3 3 0 00-3-3h-5z"
-        fill="#A3A3A3"
-      />
-    </svg>
-  )
-}
-
-const headerAnimation: Variants = {
-  initial: { opacity: 0, transition: { duration: 0.3 } },
-  animate: { opacity: 1, transition: { duration: 0.3, delay: 0.3 } },
-  exit: { opacity: 0, transition: { duration: 0.3 } },
-}
-
-const maxZIndex = 2147483647
-
-const bodyVariantBackwards: Variant = {
-  opacity: 0.4,
-  scale: 0.8,
-  zIndex: 0,
-  filter: 'blur(4px)',
-  transition: { duration: 0.4 },
-}
-
-const bodyVariantForwards: Variant = (custom: CustomAnimationProps) => ({
-  y: '100%',
-  zIndex: maxZIndex - custom.changeCount,
-  transition: { duration: 0.4 },
-})
-
-const bodyAnimation: MotionProps = {
-  initial: 'initial',
-  animate: 'animate',
-  exit: 'exit',
-  variants: {
-    initial: (custom: CustomAnimationProps, ...props) =>
-      custom.isForwards
-        ? bodyVariantForwards(custom, ...props)
-        : bodyVariantBackwards,
-    animate: (custom: CustomAnimationProps) => ({
-      y: '0%',
-      opacity: 1,
-      scale: 1,
-      zIndex: maxZIndex / 2 - custom.changeCount,
-      filter: 'blur(0px)',
-      transition: { duration: 0.4 },
-    }),
-    exit: (custom: CustomAnimationProps, ...props) =>
-      custom.isForwards
-        ? bodyVariantBackwards
-        : bodyVariantForwards(custom, ...props),
-  },
-}
-
-type ScreenProps =
-  | {
-    animated: true
-    custom: CustomAnimationProps
-  }
-  | { animated?: false }
-
-function InviteScreen(props: ScreenProps) {
-  return (
-    <AppScreen className="w-full">
-      <MotionAppScreenHeader {...(props.animated ? headerAnimation : {})}>
-        <AppScreen.Title>osulation!</AppScreen.Title>
-        <AppScreen.Subtitle>
-          Play games in a <span className="text-white">new</span> way.
-        </AppScreen.Subtitle>
-        <div className="mt-5 flex flex-wrap gap-x-6 gap-y-4 animate-bounce">
-          <Button
-            href="https://devpost.com/software/osulation"
-            variant="outline"
-          >
-            <span className="text-white mt-.5">Go to Devpost  </span>
-
-          </Button>
-        </div>
-
-      </MotionAppScreenHeader>
-
-      <MotionAppScreenBody
-        {...(props.animated ? { ...bodyAnimation, custom: props.custom } : {})}
-      >
-        <div className="px-4 py-4">
-
-        </div>
-
-        <Image src={osuimg} alt="osu" />
-        <Image src={roboflowimg} alt="roboflow" />
-
-      </MotionAppScreenBody>
-    </AppScreen>
-  )
-}
-
-function StocksScreen(props: ScreenProps) {
-  return (
-    <AppScreen className="w-full">
-      <MotionAppScreenHeader {...(props.animated ? headerAnimation : {})}>
-        <AppScreen.Title>Perfect Match</AppScreen.Title>
-        <AppScreen.Subtitle>Web Dev & Algorithms Developer for 5,000+ users</AppScreen.Subtitle>
-      </MotionAppScreenHeader>
-      <div className="mt-6 ml-4 flex flex-wrap gap-x-6 gap-y-4 animate-bounce">
-        <Button
-          href="https://perfectmatch.ai/"
-          variant="outline"
-        >
-          <span className="text-white mt-.5">Go to page!  </span>
-
-        </Button>
-      </div>
-      <MotionAppScreenBody
-        {...(props.animated ? { ...bodyAnimation, custom: props.custom } : {})}
-      >
-
-
-
-        <iframe src="https://perfectmatch.ai/" width="320" height="500" scrolling="no"></iframe>
-      </MotionAppScreenBody>
-    </AppScreen>
-  )
-}
-
-function InvestScreen(props: ScreenProps) {
-  return (
-    <AppScreen className="w-full">
-      <MotionAppScreenHeader {...(props.animated ? headerAnimation : {})}>
-        <AppScreen.Title>Data Quality Framework Analysis</AppScreen.Title>
-        <AppScreen.Subtitle>
-          Take a look at our presentation
-        </AppScreen.Subtitle>
-      </MotionAppScreenHeader>
-      <MotionAppScreenBody
-        {...(props.animated ? { ...bodyAnimation, custom: props.custom } : {})}
-      >
-        <div className="px-4 py-6">
-          <div className="space-y-4">
+function PreviewScreen({ project }: { project: Project | null }) {
+  if (!project) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <div className="text-sm font-medium text-white/30">
+            Tap a project on the phone to preview it here
           </div>
         </div>
-        <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSxVGlQyrbJDL9avGNhj6pERkPeYL5LhubW9qYet-2fjaTcNQ5q1knhQpK-EU4uvjpw5CJ13ffajiEs/embed?start=true&loop=true&delayms=3000" width="310" height="300"></iframe>
-      </MotionAppScreenBody>
-
-    </AppScreen>
-  )
-}
-
-function usePrevious<T>(value: T) {
-  let ref = useRef<T>()
-
-  useEffect(() => {
-    ref.current = value
-  }, [value])
-
-  return ref.current
-}
-
-function FeaturesDesktop() {
-  let [changeCount, setChangeCount] = useState(0)
-  let [selectedIndex, setSelectedIndex] = useState(0)
-  let prevIndex = usePrevious(selectedIndex)
-  let isForwards = prevIndex === undefined ? true : selectedIndex > prevIndex
-
-  let onChange = useDebouncedCallback(
-    (selectedIndex) => {
-      setSelectedIndex(selectedIndex)
-      setChangeCount((changeCount) => changeCount + 1)
-    },
-    100,
-    { leading: true },
-  )
-
-  return (
-    <TabGroup
-      className="grid grid-cols-12 items-center gap-8 lg:gap-16 xl:gap-24"
-      selectedIndex={selectedIndex}
-      onChange={onChange}
-      vertical
-    >
-      <TabList className="relative z-10 order-last col-span-6 space-y-6">
-        {features.map((feature, featureIndex) => (
-          <div
-            key={feature.name}
-            className="relative rounded-2xl transition-colors hover:bg-gray-800/30"
-          >
-            {featureIndex === selectedIndex && (
-              <motion.div
-                layoutId="activeBackground"
-                className="absolute inset-0 bg-gray-800"
-                initial={{ borderRadius: 16 }}
-              />
-            )}
-            <div className="relative z-10 p-8">
-              <feature.icon className="h-8 w-8" />
-              <h3 className="mt-6 text-lg font-semibold text-white">
-                <Tab className="text-left ui-not-focus-visible:outline-none">
-                  <span className="absolute inset-0 rounded-2xl" />
-                  {feature.name}
-                </Tab>
-              </h3>
-              <p className="mt-2 text-sm text-gray-400">
-                {feature.description}
-              </p>
-            </div>
-          </div>
-        ))}
-      </TabList>
-      <div className="relative col-span-6">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <CircleBackground color="#f09d90" className="animate-spin-slower" />
-        </div>
-        <PhoneFrame className="z-10 mx-auto w-full max-w-[366px]">
-          <TabPanels as={Fragment}>
-            <AnimatePresence
-              initial={false}
-              custom={{ isForwards, changeCount }}
-            >
-              {features.map((feature, featureIndex) =>
-                selectedIndex === featureIndex ? (
-                  <TabPanel
-                    static
-                    key={feature.name + changeCount}
-                    className="col-start-1 row-start-1 flex focus:outline-offset-[32px] ui-not-focus-visible:outline-none"
-                  >
-                    <feature.screen
-                      animated
-                      custom={{ isForwards, changeCount }}
-                    />
-                  </TabPanel>
-                ) : null,
-              )}
-            </AnimatePresence>
-          </TabPanels>
-        </PhoneFrame>
       </div>
-    </TabGroup>
-  )
-}
-
-function FeaturesMobile() {
-  let [activeIndex, setActiveIndex] = useState(0)
-  let slideContainerRef = useRef<React.ElementRef<'div'>>(null)
-  let slideRefs = useRef<Array<React.ElementRef<'div'>>>([])
-
-  useEffect(() => {
-    let observer = new window.IntersectionObserver(
-      (entries) => {
-        for (let entry of entries) {
-          if (entry.isIntersecting && entry.target instanceof HTMLDivElement) {
-            setActiveIndex(slideRefs.current.indexOf(entry.target))
-            break
-          }
-        }
-      },
-      {
-        root: slideContainerRef.current,
-        threshold: 0.6,
-      },
     )
+  }
 
-    for (let slide of slideRefs.current) {
-      if (slide) {
-        observer.observe(slide)
-      }
-    }
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [slideContainerRef, slideRefs])
+  const hasEmbed = project.previewUrl
+  const hasImage = project.previewImage
 
   return (
-    <>
-      <div
-        ref={slideContainerRef}
-        className="-mb-4 flex snap-x snap-mandatory -space-x-4 overflow-x-auto overscroll-x-contain scroll-smooth pb-4 [scrollbar-width:none] sm:-space-x-6 [&::-webkit-scrollbar]:hidden"
-      >
-        {features.map((feature, featureIndex) => (
-          <div
-            key={featureIndex}
-            className="w-full flex-none snap-center px-4 sm:px-6"
+    <div className="flex h-full flex-col">
+      <div className="flex items-center gap-3 px-4 py-3">
+        <div
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg ring-1 ring-white/15"
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${project.iconGradient[0]}, ${project.iconGradient[1]})`,
+          }}
+        >
+          <span className="text-[10px] font-semibold text-white/95">
+            {project.iconText}
+          </span>
+        </div>
+        <div className="min-w-0">
+          <div className="truncate text-sm font-semibold text-white/90">
+            {project.name}
+          </div>
+          <div className="truncate text-xs text-white/50">{project.tagline}</div>
+        </div>
+        {project.links.length > 0 && (
+          <a
+            href={project.links[0].href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-auto shrink-0 rounded-full bg-white/5 px-3 py-1.5 text-xs font-semibold text-white/70 ring-1 ring-white/10 transition hover:bg-white/10 hover:text-white"
           >
-            <div className="relative transform overflow-hidden rounded-2xl bg-gray-800 px-5 py-6">
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <CircleBackground
-                  color="#13B5C8"
-                  className={featureIndex % 2 === 1 ? 'rotate-180' : undefined}
-                />
+            Open {project.links[0].label} &rarr;
+          </a>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-hidden rounded-b-2xl">
+        {hasImage ? (
+          <div className="relative flex h-full items-center justify-center bg-black/30 p-6">
+            <Image
+              src={project.previewImage!}
+              alt={`${project.name} preview`}
+              width={1200}
+              height={675}
+              className="max-h-full w-auto rounded-xl object-contain shadow-2xl"
+            />
+          </div>
+        ) : hasEmbed ? (
+          <iframe
+            src={project.previewUrl}
+            title={`${project.name} preview`}
+            className="h-full w-full border-0"
+            sandbox="allow-scripts allow-same-origin allow-popups"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center bg-white/[0.02]">
+            <div className="text-center">
+              <div
+                className="mx-auto grid h-16 w-16 place-items-center rounded-3xl ring-1 ring-white/15"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, ${project.iconGradient[0]}, ${project.iconGradient[1]})`,
+                }}
+              >
+                <span className="text-lg font-bold text-white/95">
+                  {project.iconText}
+                </span>
               </div>
-              <PhoneFrame className="relative mx-auto w-full max-w-[366px]">
-                <feature.screen />
-              </PhoneFrame>
-              <div className="absolute inset-x-0 bottom-0 bg-gray-800/95 p-6 backdrop-blur sm:p-10">
-                <feature.icon className="h-8 w-8" />
-                <h3 className="mt-6 text-sm font-semibold text-white sm:text-lg">
-                  {feature.name}
-                </h3>
-                <p className="mt-2 text-sm text-gray-400">
-                  {feature.description}
-                </p>
+              <div className="mt-4 text-sm font-semibold text-white/70">
+                {project.name}
               </div>
+              <div className="mt-1 max-w-xs text-xs text-white/40">
+                {project.description}
+              </div>
+              {project.previewNote && (
+                <div className="mt-6 inline-block rounded-full bg-white/5 px-4 py-2 text-xs font-semibold text-white/60 ring-1 ring-white/10">
+                  {project.previewNote}
+                </div>
+              )}
             </div>
           </div>
-        ))}
+        )}
       </div>
-      <div className="mt-6 flex justify-center gap-3">
-        {features.map((_, featureIndex) => (
-          <button
-            type="button"
-            key={featureIndex}
-            className={clsx(
-              'relative h-0.5 w-4 rounded-full',
-              featureIndex === activeIndex ? 'bg-gray-300' : 'bg-gray-500',
-            )}
-            aria-label={`Go to slide ${featureIndex + 1}`}
-            onClick={() => {
-              slideRefs.current[featureIndex].scrollIntoView({
-                block: 'nearest',
-                inline: 'nearest',
-              })
-            }}
-          >
-            <span className="absolute -inset-x-1.5 -inset-y-3" />
-          </button>
-        ))}
-      </div>
-    </>
+    </div>
   )
 }
 
 export function Projects() {
+  let [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
+  let [openProjectId, setOpenProjectId] = useState<string | null>(null)
+
+  const selectedProject = selectedProjectId
+    ? projectsById[selectedProjectId] ?? null
+    : null
+
   return (
     <section
       id="projects"
-      aria-label="Features for investing all your money"
-      className="bg-gray-900 py-20 sm:py-32"
+      aria-label="Projects"
+      className="bg-gray-950 py-20 sm:py-32"
     >
       <Container>
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-3xl">
@@ -472,14 +126,30 @@ export function Projects() {
             Some of my recent projects!
           </h2>
           <p className="mt-2 text-lg text-gray-400">
+            Tap an app on the phone to see the project details and preview.
           </p>
         </div>
       </Container>
-      <div className="mt-16 md:hidden">
-        <FeaturesMobile />
-      </div>
-      <Container className="hidden md:mt-20 md:block">
-        <FeaturesDesktop />
+
+      <Container className="mt-16">
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[380px_1fr] lg:gap-14">
+          {/* Phone — left side */}
+          <div className="relative mx-auto w-full max-w-[380px]">
+            <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <CircleBackground color="#f09d90" className="animate-spin-slower" />
+            </div>
+            <ProjectsPhone
+              openProjectId={openProjectId}
+              onOpenProjectIdHandled={() => setOpenProjectId(null)}
+              onSelectProject={(id) => setSelectedProjectId(id)}
+            />
+          </div>
+
+          {/* Preview screen — right side */}
+          <div className="hidden h-[620px] overflow-hidden rounded-2xl bg-gray-900/60 ring-1 ring-white/10 lg:flex lg:flex-col">
+            <PreviewScreen project={selectedProject} />
+          </div>
+        </div>
       </Container>
     </section>
   )
