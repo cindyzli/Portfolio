@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === 'production'
+const isGhPages = process.env.DEPLOY_TARGET === 'gh-pages'
 
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  basePath: isProd ? '/Portfolio' : undefined,
-  assetPrefix: isProd ? '/Portfolio/' : undefined,
+  basePath: isGhPages ? '/Portfolio' : undefined,
+  assetPrefix: isGhPages ? '/Portfolio/' : undefined,
   images: {
     unoptimized: true,
   },
